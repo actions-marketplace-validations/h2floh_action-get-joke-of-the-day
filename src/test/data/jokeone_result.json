@@ -1,0 +1,26 @@
+{
+    "success": {
+      "total": 1
+    },
+    "contents": {
+      "jokes": [
+        {
+          "category": "jod",
+          "title": "Joke of the day ",
+          "description": "Joke of the day ",
+          "background": "",
+          "date": "2019-01-23",
+          "joke": {
+            "title": "Courtship Signals",
+            "length": "83",
+            "clean": "1",
+            "racial": "0",
+            "date": "2019-01-23",
+            "id": "He3_WpaNfBV1Hs7zMLsR4QeF",
+            "text": "Q. Why shouldn't you marry a tennis player?\r\nA. Because Love means nothing to them."
+          }
+        }
+      ],
+      "copyright": "2018-20 https://jokes.one"
+    }
+}

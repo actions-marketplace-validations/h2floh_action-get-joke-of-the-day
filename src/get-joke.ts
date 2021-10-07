@@ -14,10 +14,12 @@ export async function run() {
 
 interface Joke {
   title: string;
-  text: string;
+  joke: {
+    text: string;
+  };
 }
 
-interface JokeResult {
+export interface JokeResult {
   contents: {
     jokes: Joke[];
   };
@@ -25,14 +27,18 @@ interface JokeResult {
 
 export async function getJokeOfTheDay(apiKey: string): Promise<boolean> {
   const restClient = new rm.RestClient(
-    'jokes-one-api',
+    'github-action-get-joke-of-the-day',
     'https://api.jokes.one'
   );
 
-  const response = await restClient.get<JokeResult>('/jod');
+  let requestOptions: rm.IRequestOptions = {acceptHeader: 'application/json'};
+  if (apiKey != 'none') {
+    requestOptions.additionalHeaders = {'X-JokesOne-Api-Secret': apiKey};
+  }
+  const response = await restClient.get<JokeResult>('/jod', requestOptions);
 
   if (response.statusCode == StatusCodes.OK) {
-    const joke = response.result?.contents.jokes[0].text;
+    const joke = response.result?.contents.jokes[0].joke.text;
     console.log(`Joke of the day: ${joke}`);
     core.setOutput('joke', joke);
   } else {
