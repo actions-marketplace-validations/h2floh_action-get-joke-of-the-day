@@ -6,9 +6,6 @@ on:
         default: 'none'
         required: false
         type: string
-  schedule:
-    # once 9am (UTC+9) every Tuesdays
-    - cron:  '0 0 * * 2'  
   
 jobs:
   print-joke-of-the-day:

@@ -1,0 +1,11 @@
+on:
+  schedule:
+    # once 9am (UTC+9) every Tuesdays
+    - cron:  '0 0 * * 2'  
+  
+jobs:
+  print-joke-of-the-day:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: h2floh/action-get-joke-of-the-day@main
