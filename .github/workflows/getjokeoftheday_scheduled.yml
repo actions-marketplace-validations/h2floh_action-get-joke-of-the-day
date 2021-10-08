@@ -1,3 +1,4 @@
+name: Scheduled workflow
 on:
   schedule:
     # once 9am (UTC+9) every Tuesdays
