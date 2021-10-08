@@ -1,6 +1,11 @@
-name: 'Joke of the day - every day (LATEST VERSION)'
+name: 'Joke of the day - every day'
 on:
   workflow_dispatch:
+    inputs:
+      actionVersion:
+        description: 'Version / Branch of the action'     
+        required: false
+        default: 'main'
   schedule:
     # once 9am (UTC+9) every day
     - cron:  '0 0 * * *'  
@@ -10,4 +15,4 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: h2floh/action-get-joke-of-the-day@main
+      - uses: h2floh/action-get-joke-of-the-day@${{ github.event.inputs.actionVersion }}
