@@ -1,0 +1,13 @@
+name: 'Get Joke Of The Day'
+description: 'Echos the Joke of the Day'
+inputs:
+  jokes-one-api-key:  # id of input
+    description: 'Jokes.One API Key (not required for less than 10 invocations/hour)'
+    required: false
+    default: 'none'
+outputs:
+  joke: # id of output
+    description: 'The string representation of the Joke of the day from Jokes.One'
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
