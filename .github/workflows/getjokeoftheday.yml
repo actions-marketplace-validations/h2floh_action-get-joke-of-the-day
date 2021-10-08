@@ -1,12 +1,9 @@
-name: Manually triggered workflow
+name: 'Joke of the day - every day'
 on:
   workflow_dispatch:
-    inputs:
-      jokes-one-api-key:
-        description: 'Jokes.One API Key (not required for less than 10 invocations/hour)'
-        default: 'none'
-        required: false
-        type: string
+  schedule:
+    # once 9am (UTC+9) every day
+    - cron:  '0 0 * * *'  
   
 jobs:
   print-joke-of-the-day:
@@ -14,5 +11,3 @@ jobs:
 
     steps:
       - uses: h2floh/action-get-joke-of-the-day@main
-        with:
-          jokes-one-api-key: ${{ github.event.inputs.jokes-one-api-key }}
