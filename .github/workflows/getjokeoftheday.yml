@@ -1,0 +1,20 @@
+on:
+  workflow_call:
+    inputs:
+      jokes-one-api-key:
+        description: 'Jokes.One API Key (not required for less than 10 invocations/hour)'
+        default: 'none'
+        required: false
+        type: string
+  schedule:
+    # once 9am (UTC+9) every Tuesdays
+    - cron:  '0 0 * * 2'  
+  
+jobs:
+  print-joke-of-the-day:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: h2floh/action-get-joke-of-the-day@main
+        with:
+          jokes-one-api-key: ${{ github.event.inputs.jokes-one-api-key }}
