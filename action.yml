@@ -9,5 +9,5 @@ outputs:
   joke: # id of output
     description: 'The string representation of the Joke of the day from Jokes.One'
 runs:
-  using: 'node16'
+  using: 'node12'
   main: 'dist/index.js'
