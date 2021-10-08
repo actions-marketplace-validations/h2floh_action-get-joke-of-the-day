@@ -60,7 +60,7 @@ describe('get-joke', () => {
 
         // JokeOne API
         apiSpy = jest.spyOn(rm.RestClient.prototype, 'get');
-        apiSpy.mockImplementation(path => {
+        apiSpy.mockImplementation(() => {
             const response: rm.IRestResponse<main.JokeResult> = {
                 statusCode: StatusCodes.OK,
                 headers: {},
@@ -99,7 +99,7 @@ describe('get-joke', () => {
         expect(apiSpy).toHaveBeenCalledWith('/jod', {"acceptHeader": "application/json", "additionalHeaders": {"X-JokesOne-Api-Secret": "ABCD1234"}});
       });
 
-      it('oops path - something went wrong', async () => {
+      it('oops path - something went wrong on the API', async () => {
         inputs['jokes-one-api-key'] = 'none'; 
         const response: rm.IRestResponse<string> = {
             statusCode: StatusCodes.PAYMENT_REQUIRED,
@@ -116,6 +116,33 @@ describe('get-joke', () => {
         expect(apiSpy).toHaveBeenCalledTimes(1);
         expect(apiSpy).toHaveBeenCalledWith('/jod', {"acceptHeader": "application/json"});
         expect(failedSpy).toHaveBeenCalledWith(JSON.stringify(response));
+      });
+
+      it('oops path - something went wrong API sends unexpected result', async () => {
+        inputs['jokes-one-api-key'] = 'none'; 
+        const response: rm.IRestResponse<string> = {
+            statusCode: StatusCodes.OK,
+            headers: {},
+            result: 'You will not be able to process this payload'
+        };
+        
+        apiSpy.mockImplementationOnce((path => {
+            
+            return response;
+        }));
+
+        await main.run();
+        expect(apiSpy).toHaveBeenCalledTimes(1);
+        expect(apiSpy).toHaveBeenCalledWith('/jod', {"acceptHeader": "application/json"});
+        expect(failedSpy).toHaveBeenCalledWith("Cannot read property 'jokes' of undefined");
+      });
+
+
+      it('integration test - Works with the real API', async () => {
+        inputs['jokes-one-api-key'] = 'none';
+
+        await main.run();
+        expect(outSpy).toHaveBeenCalled();
       });
     
 });
