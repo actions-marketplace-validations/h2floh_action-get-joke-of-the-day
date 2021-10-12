@@ -6,12 +6,12 @@ on:
 
 jobs:
   CIandUpdateDist:
-    name: Increment Version
+    name: 'Do CI and after push artifact to feature branch'
     runs-on: ubuntu-latest
 
     steps:
     - name: Continuous Integration
-      uses: ./.github/workflows/CI.yml
+      uses: .github/workflows/CI
 
     - name: Commit and push build result
       uses: EndBug/add-and-commit@v7

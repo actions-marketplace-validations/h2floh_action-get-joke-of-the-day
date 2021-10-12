@@ -1,14 +1,10 @@
-name: Reusable CI
-
-on:
-  workflow_call:
-
-jobs:
-  CI:
-    name: Increment Version
-    runs-on: ubuntu-latest
-
-    steps:
+name: 'CI steps'
+description: 'Include the CI steps required for this repo'
+inputs:
+outputs:
+runs:
+  using: "composite"
+  steps:
     - name: Checkout repository
       uses: actions/checkout@v2
 
