@@ -1,0 +1,22 @@
+name: CI on PR
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  CIandUpdateDist:
+    name: Increment Version
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Continuous Integration
+      uses: .github/workflows/CI.yml
+
+    - name: Commit and push build result
+      uses: EndBug/add-and-commit@v7
+      with:
+        add: 'dist/index.js'
+        message: 'adding dist/index.js result from CI'
+        push: true
+        signoff: true
