@@ -1,17 +1,16 @@
 import * as core from '@actions/core';
+import {StatusCodes} from 'http-status-codes';
 import * as rm from 'typed-rest-client/RestClient';
 import * as main from '../get-joke';
-import {StatusCodes} from 'http-status-codes';
-
-let jokeOneResponseJsonData = require('./data/jokeone_result.json');
+import * as jokeOneResponseJsonData from './data/jokeone_result.json';
 
 describe('get-joke', () => {
 
-    // ACTION TEST&MOCK SPECIFIC SETUP 
+    // ACTION TEST&MOCK SPECIFIC SETUP
     // COPIED FROM https://github.com/actions/setup-go/blob/main/__tests__/setup-go.test.ts
     // AND EXTENDED WITH Jokes.One API MOCK
 
-    let inputs = {} as any;  
+    let inputs = {} as any;
     let inSpy: jest.SpyInstance;
     let cnSpy: jest.SpyInstance;
     let logSpy: jest.SpyInstance;
@@ -21,16 +20,16 @@ describe('get-joke', () => {
     let failedSpy: jest.SpyInstance;
 
     beforeAll(() => {
-        process.env['GITHUB_PATH'] = ''; // Stub out ENV file functionality so we can verify it writes to standard out
+        process.env.GITHUB_PATH = ''; // Stub out ENV file functionality so we can verify it writes to standard out
         console.log('::stop-commands::stoptoken'); // Disable executing of runner commands when running tests in actions
       });
-    
+
       beforeEach(() => {
         // @actions/core
         inputs = {};
         inSpy = jest.spyOn(core, 'getInput');
         inSpy.mockImplementation(name => inputs[name]);
-     
+
         // writes
         cnSpy = jest.spyOn(process.stdout, 'write');
         logSpy = jest.spyOn(core, 'info');
@@ -69,21 +68,21 @@ describe('get-joke', () => {
             return response;
         })
       });
-    
+
       afterEach(() => {
         inputs = {};
         jest.resetAllMocks();
         jest.clearAllMocks();
-        //jest.restoreAllMocks();
+        // jest.restoreAllMocks();
       });
-    
+
       afterAll(async () => {
         console.log('::stoptoken::'); // Re-enable executing of runner commands when running tests in actions
       }, 100000);
 
 
       it('happy path - returns a joke without api key', async () => {
-        inputs['jokes-one-api-key'] = 'none'; 
+        inputs['jokes-one-api-key'] = 'none';
         await main.run();
         expect(outSpy).toHaveBeenCalledWith('joke', 'Q. Why shouldn\'t you marry a tennis player?\r\nA. Because Love means nothing to them.');
         expect(apiSpy).toHaveBeenCalledTimes(1);
@@ -92,7 +91,7 @@ describe('get-joke', () => {
 
 
       it('happy path - returns a joke with api key', async () => {
-        inputs['jokes-one-api-key'] = 'ABCD1234'; 
+        inputs['jokes-one-api-key'] = 'ABCD1234';
         await main.run();
         expect(outSpy).toHaveBeenCalledWith('joke', 'Q. Why shouldn\'t you marry a tennis player?\r\nA. Because Love means nothing to them.');
         expect(apiSpy).toHaveBeenCalledTimes(1);
@@ -100,15 +99,15 @@ describe('get-joke', () => {
       });
 
       it('oops path - something went wrong on the API', async () => {
-        inputs['jokes-one-api-key'] = 'none'; 
+        inputs['jokes-one-api-key'] = 'none';
         const response: rm.IRestResponse<string> = {
             statusCode: StatusCodes.PAYMENT_REQUIRED,
             headers: {},
             result: 'You need to pay!'
         };
-        
+
         apiSpy.mockImplementationOnce((path => {
-            
+
             return response;
         }));
 
@@ -119,15 +118,15 @@ describe('get-joke', () => {
       });
 
       it('oops path - something went wrong API sends unexpected result', async () => {
-        inputs['jokes-one-api-key'] = 'none'; 
+        inputs['jokes-one-api-key'] = 'none';
         const response: rm.IRestResponse<string> = {
             statusCode: StatusCodes.OK,
             headers: {},
             result: 'You will not be able to process this payload'
         };
-        
+
         apiSpy.mockImplementationOnce((path => {
-            
+
             return response;
         }));
 
@@ -144,5 +143,5 @@ describe('get-joke', () => {
         await main.run();
         expect(outSpy).toHaveBeenCalled();
       });
-    
+
 });

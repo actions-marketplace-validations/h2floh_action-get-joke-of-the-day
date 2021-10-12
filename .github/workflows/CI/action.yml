@@ -1,0 +1,34 @@
+name: 'CI steps'
+description: 'Include the CI steps required for this repo'
+# inputs:
+# outputs:
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Initialize npm
+      run: |
+        npm ci
+      shell: bash
+        
+    - name: Run format check
+      run: |
+        npm run format-check
+      shell: bash
+
+    - name: Run linter
+      run: |
+        npm run lint
+      shell: bash
+
+    - name: Run tests
+      run: |
+        npm run test
+      shell: bash
+        
+    - name: Run build
+      run: |
+        npm run build
+      shell: bash

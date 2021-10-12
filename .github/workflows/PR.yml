@@ -1,0 +1,33 @@
+name: CI on PR
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  CIandUpdateDist:
+    name: 'Do CI and after push artifact to feature branch'
+    runs-on: ubuntu-latest
+
+    steps:
+    # Including the CI 'template/composite Action' from same branch
+    # needs the code to be checked out first (makes sense)
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Continuous Integration
+      uses: ./.github/workflows/CI
+
+    # Including the CI 'template/composite Action' from repo {reference}
+    # allows to do the checkout within the composite action but
+    # loosing the ability to run fixes to CI with same PR
+    # - name: Continuous Integration
+    #   uses: h2floh/action-get-joke-of-the-day/.github/workflows/CI@main
+
+    - name: Commit and push build result
+      uses: EndBug/add-and-commit@v7
+      with:
+        add: 'dist/index.js'
+        message: 'adding dist/index.js result from CI'
+        push: true
+        signoff: true
