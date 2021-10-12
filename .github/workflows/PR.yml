@@ -11,7 +11,7 @@ jobs:
 
     steps:
     - name: Continuous Integration
-      uses: .github/workflows/CI
+      uses: ./.github/workflows/CI
 
     - name: Commit and push build result
       uses: EndBug/add-and-commit@v7
