@@ -1,7 +1,7 @@
 name: 'CI steps'
 description: 'Include the CI steps required for this repo'
-inputs:
-outputs:
+# inputs:
+# outputs:
 runs:
   using: "composite"
   steps:
