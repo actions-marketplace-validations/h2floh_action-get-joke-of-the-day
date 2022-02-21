@@ -1,0 +1,10 @@
+name: 'Joke of the day'
+on:
+  workflow_call:
+  
+jobs:
+  print-joke-of-the-day:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: h2floh/action-get-joke-of-the-day@main
